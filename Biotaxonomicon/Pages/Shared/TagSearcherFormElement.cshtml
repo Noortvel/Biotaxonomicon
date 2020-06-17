@@ -1,0 +1,14 @@
+﻿@page
+<div style="display: flex; flex-wrap:wrap;" id="tagsList">
+    <span class="badge badge-pill badge-dark">#Теги</span>
+</div>
+<div class="input-group mb-3">
+    <div class="input-group-prepend">
+        <span class="input-group-text">Поиск тегов</span>
+    </div>
+    <input type="text" class="form-control" id="tagsSearchField" oninput="onTagsSearchFieldInput" />
+</div>
+<ul class="list-group" id="tagsDropDownMenu">
+</ul>
+<input hidden=hidden type="text" name="tagsIdsInput" id="tagsIdsInput" />
+@* Need add tag_searcher.js on master page in scripts *@

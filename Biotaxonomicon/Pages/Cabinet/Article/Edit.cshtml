@@ -1,0 +1,113 @@
+﻿@page "{id}"
+@model Biotaxonomicon.Pages.Cabinet.Article.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@section Styles{
+    <link rel="stylesheet" type="text/css" href="~/lib/pell/pell.min.css">
+    <style>
+        .pell-content {
+            height: 600px;
+        }
+    </style>
+}
+<a class="btn btn-outline-dark" asp-page="./Index" role="button">&ltСтатьи</a>
+<h1>Создание статьи</h1>
+@if (Model.SuccesInfo != "")
+{
+    <div class="alert alert-success" role="alert">
+        @Model.SuccesInfo
+    </div>
+}
+<form method="post">
+    <input hidden name="id" value="@Model.Article.Id" />
+    <div class="form-group">
+        <label for="headerInput">Заголовок</label>
+        <small id="headerInputHelp" class="form-text text-muted">от 1-го до 48-ми символов</small>
+        <input value="@Model.Article.Header" type="text" name="headerInput" class="form-control" id="headerInput" minlength="1" maxlength="48" required>
+    </div>
+    <div class="form-group">
+        <label for="headerLatinInput">Заголовок на латинском</label>
+        <small id="headerLatinInputHelp" class="form-text text-muted">от 1-го до 48-ми символов</small>
+        <input value="@Model.Article.HeaderLatin" type="text" name="headerLatinInput" class="form-control" id="headerLatinInput" minlength="1" maxlength="48" required>
+    </div>
+    <div class="form-group">
+        <label for="bodyInput">Тело</label>
+        <small id="bodyInputHelp" class="form-text text-muted">от 15-ти до 1000-ми символов</small>
+        <ul class="nav nav-tabs" id="myTab" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="editor-tab" data-toggle="tab" href="#editor" role="tab" aria-controls="editor" aria-selected="true">Редактор</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="editorRaw-tab" data-toggle="tab" href="#editorRaw" role="tab" aria-controls="editorRaw" aria-selected="false">Разметка</a>
+            </li>
+        </ul>
+        <div class="tab-content" id="myTabContent">
+            <div class="tab-pane show active" id="editor" role="tabpanel" aria-labelledby="editor-tab">
+                <div id="editorPell" class="pell">
+                </div>
+            </div>
+            <div class="tab-pane" id="editorRaw" role="tabpanel" aria-labelledby="editorRaw-tab">
+                <textarea onchange="onRawEditorChange" class="form-control" name="bodyInput" id="bodyInput" rows="22" required>
+                @Model.Article.Body
+                </textarea>
+            </div>
+        </div>
+    </div>
+
+    <partial name="TagSearcherFormElement" model="null" />
+
+    @if (Model.WarningInfo != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.WarningInfo
+        </div>
+    }
+
+    <button type="submit" class="btn btn-primary">Изменить</button>
+</form>
+
+@section Scripts
+{
+    <script src="~/js/tag_searcher.js"></script>
+    <script src="~/lib/pell/pell.min.js"></script>
+    <script>
+
+        init = window.pell.init;
+        exec = window.pell.exec;
+        const editor = init({
+            element: document.getElementById('editorPell'),
+            onChange: onEditorChange,
+            //onChange: html => {
+            //    document.getElementById('bodyInput').textContent = html
+            //},
+            defaultParagraphSeparator: 'div',
+            styleWithCSS: false,
+            actions: [
+                'paragraph',
+                'bold',
+                'italic',
+                'heading1',
+                'heading2',
+                'link'
+            ]
+        })
+        let eraw = document.getElementById('bodyInput');
+        eraw.onchange = onRawEditorChange;
+        function onEditorChange(e) {
+            let el = document.getElementById('bodyInput');
+            el.value = new String(e);
+            el.style.display = 'none';
+            el.style.display = 'block';
+        }
+        function onRawEditorChange(e) {
+            editor.content.innerHTML = e.target.value;
+        }
+        function onRawEditorFocus() {
+            eraw.style.display = 'none';
+            eraw.style.display = 'block';
+        }
+        editor.content.innerHTML = eraw.value;
+    </script>
+}

@@ -1,0 +1,23 @@
+﻿@page "{id}"
+@model Biotaxonomicon.Pages.Cabinet.Article.DeleteModel
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Delete</title>
+</head>
+<body>
+    <h1>Вы уверенны?</h1>
+    <form method="post">
+        <a class="btn-sm btn-secondary" href="./Index" role="button">Нет</a>
+        <button type="submit" class="btn-sm btn-danger">Да, удалить</button>
+        <input type="number" hidden name="id" value="@Model.ID" />
+    </form>
+  
+</body>
+</html>

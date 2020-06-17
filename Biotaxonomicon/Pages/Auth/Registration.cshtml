@@ -1,0 +1,31 @@
+﻿@page
+@model Biotaxonomicon.Pages.Auth.RegistrationModel
+@{
+    ViewData["Title"] = "Registration";
+}
+
+    <div>
+        <h1>Регистрация</h1>
+        <form method="post">
+            <div class="form-group">
+                <label for="nickInput">Псевдоним</label>
+                <input type="text" name="nickInput" class="form-control" id="nickInput" minlength="6" maxlength="24">
+            </div>
+            <div class="form-group">
+                <label for="loginInput">Логин</label>
+                <input type="text" name="loginInput" class="form-control" id="loginInput" minlength="6" maxlength="24">
+            </div>
+            <div class="form-group">
+                <label for="passwordInput">Пароль</label>
+                <input type="password" name="passwordInput" class="form-control" id="passwordInput" minlength="6" maxlength="24">
+            </div>
+            @if (Model.WarningInfo != "")
+            {
+                <div class="alert alert-danger" role="alert">
+                    @Model.WarningInfo
+                </div>
+            }
+            <button type="submit" class="btn btn-primary">Регистрация</button>
+        </form>
+    </div>
+

@@ -1,0 +1,186 @@
+﻿@page
+@model Biotaxonomicon.Pages.Cabinet.TaxNode.CreateModel
+@{
+    ViewData["Title"] = "Create";
+}
+
+<a class="btn btn-outline-dark" asp-page="./Index" role="button">&ltУзлы</a>
+<h1>Создание узла дерева</h1>
+<form method="post">
+
+    <div class="form-group">
+        <p>Статья родительского узла</p>
+        <ul class="list-group list-group-horizontal">
+            @*<li class="list-group-item">Метка </li>*@
+            <li class="list-group-item">
+                <button type="button" id="parentNodeDiv" class="badge badge-pill badge-info" title="Нет">Нет</button>
+            </li>
+        </ul>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Поиск метки</span>
+            </div>
+            <input type="text" class="form-control" id="parentNodeSearchField" oninput="onParentNodeSearchFieldInput" />
+        </div>
+        <ul class="list-group" id="parentNodeDropDownMenu">
+        </ul>
+        <input hidden=hidden type="number" name="parentArticleId" id="parentNodeIdInput" />
+    </div>
+    <div class="form-group">
+        <p>Статья узла</p>
+        <ul class="list-group list-group-horizontal">
+            <li class="list-group-item">
+                <button type="button" id="nodeDiv" class="badge badge-pill badge-info" title="Нет">Нет</button>
+            </li>
+        </ul>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text">Поиск метки</span>
+            </div>
+            <input type="text" class="form-control" id="nodeSearchField" oninput="onNodeSearchFieldInput" />
+        </div>
+        <ul class="list-group" id="nodeDropDownMenu">
+        </ul>
+        <input hidden=hidden type="number" name="currentArticleId" id="nodeIdInput" />
+    </div>
+
+    @if (Model.WarningInfo != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.WarningInfo
+        </div>
+    }
+    @if (Model.SuccesInfo != "")
+    {
+        <div class="alert alert-success" role="alert">
+            @Model.SuccesInfo
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Создать</button>
+
+</form>
+
+@section Scripts
+{ 
+    <script src="~/js/tag_searcher.js"></script>
+    <script>
+
+        let parentNodeSearchField = document.getElementById('parentNodeSearchField');
+        parentNodeSearchField.oninput = onParentNodeSearchFieldInput;
+
+        let parentNodeDropDownMenu = document.getElementById('parentNodeDropDownMenu');
+        let parentNodeDiv = document.getElementById('parentNodeDiv');
+        let parentNodeIdInput = document.getElementById('parentNodeIdInput');
+
+        parentNodeDiv.onclick = onParentNodeMainSlotClick;
+        function onParentNodeMainSlotClick() {
+            parentNodeIdInput.value = 'none';
+            this.innerHTML = 'Нет';
+            this.title = 'Нет';
+        }
+
+        function onParentNodeMenuItemClick() {
+            parentNodeIdInput.value = this.title;
+            parentNodeDiv.title = this.title;
+            parentNodeDiv.innerHTML = this.innerHTML;
+            this.parentElement.removeChild(this);
+        }
+        
+        function parentNodeDropMenuDataFill(data) {
+            console.log(data);
+            while (parentNodeDropDownMenu.childElementCount > 0) {
+                parentNodeDropDownMenu.removeChild(parentNodeDropDownMenu.firstChild);
+            }
+            for (let i = 0; i < data.length; i++) {
+
+                let item = document.createElement('button');
+                item.className = 'badge badge-pill badge-info';
+                item.type = "button"
+                item.onclick = onParentNodeMenuItemClick;
+                item.title = data[i]['id'];
+                item.innerHTML = data[i]['id'] + ':[' + data[i]['headerLatin'] + ',' + data[i]['header'] + ']';
+                parentNodeDropDownMenu.appendChild(item);
+            }
+        }
+        function beginSendXhr2(searchedTag) {
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('GET', 'https://' + location.host + '/Cabinet/Article/FetchArticles/?articleHeader=' + searchedTag);
+            xhr.onload = function () {
+                console.log('loaded: ' + xhr.response);
+                parentNodeDropMenuDataFill(xhr.response);
+            }
+            xhr.onerror = function () {
+                console.log('error:' + xhr.status + ' ' + xhr.statusText)
+            }
+            xhr.readyState = function () {
+                console.log('xhr ready state: ' + xhr.readyState);
+            }
+            xhr.send();
+        }
+        function onParentNodeSearchFieldInput() {
+            beginSendXhr2(parentNodeSearchField.value);
+        }
+    </script>
+    <script>
+
+        //3
+        let nodeSearchField = document.getElementById('nodeSearchField');
+        nodeSearchField.oninput = onNodeSearchFieldInput;
+
+        let nodeDropDownMenu = document.getElementById('nodeDropDownMenu');
+        let nodeDiv = document.getElementById('nodeDiv');
+        let nodeIdInput = document.getElementById('nodeIdInput');
+
+        nodeDiv.onclick = onNodeMainSlotClick;
+        function onNodeMainSlotClick() {
+            nodeIdInput.value = 'none';
+            this.innerHTML = 'Нет';
+            this.title = 'Нет';
+        }
+
+        function onNodeMenuItemClick() {
+            nodeIdInput.value = this.title;
+            nodeDiv.title = this.title;
+            nodeDiv.innerHTML = this.innerHTML;
+            this.parentElement.removeChild(this);
+        }
+
+        function nodeDropMenuDataFill(data) {
+            console.log(data);
+            while (nodeDropDownMenu.childElementCount > 0) {
+                nodeDropDownMenu.removeChild(nodeDropDownMenu.firstChild);
+            }
+            for (let i = 0; i < data.length; i++) {
+
+                let item = document.createElement('button');
+                item.className = 'badge badge-pill badge-info';
+                item.type = "button"
+                item.onclick = onNodeMenuItemClick;
+                item.title = data[i]['id'];
+                item.innerHTML = data[i]['id'] + ':[' + data[i]['headerLatin'] + ',' + data[i]['header'] + ']';
+                nodeDropDownMenu.appendChild(item);
+            }
+        }
+        function onNodeSearchFieldInput() {
+            let url = 'https://' + location.host + '/Cabinet/Article/FetchArticlesAll/?articleHeader=' + nodeSearchField.value;
+            beginSendXhr3(url, nodeDropMenuDataFill);
+        }
+        function beginSendXhr3(Url, onLoadCallback) {
+            let xhr = new XMLHttpRequest();
+            xhr.responseType = 'json';
+            xhr.open('GET', Url);
+            xhr.onload = function () {
+                console.log('loaded: ' + xhr.response);
+                onLoadCallback(xhr.response);
+            }
+            xhr.onerror = function () {
+                console.log('error:' + xhr.status + ' ' + xhr.statusText)
+            }
+            xhr.readyState = function () {
+                console.log('xhr ready state: ' + xhr.readyState);
+            }
+            xhr.send();
+        }
+    </script>
+}

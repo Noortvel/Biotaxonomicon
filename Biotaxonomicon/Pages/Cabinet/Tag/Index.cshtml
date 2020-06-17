@@ -1,0 +1,33 @@
+﻿@page
+@model Biotaxonomicon.Pages.Cabinet.Tag.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Редактор тэгов</h1>
+<a class="btn btn-outline-primary" asp-page="./Create" role="button">Создать</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название</th>
+            <th scope="col">Латинское название</th>
+            <th scope="col">-</th>
+        </tr>
+    </thead>
+    @for (int i = 0; i < Model.tags.Count; i++)
+    {
+        <tbody>
+            <tr>
+                <th scope="row">@Model.tags[i].Id</th>
+                <td>@Model.tags[i].RussianName</td>
+                <td>@Model.tags[i].LatinName</td>
+                <td>
+                    <a class="btn-sm btn-secondary" asp-page="./Edit" asp-route-id="@Model.tags[i].Id" role="button">Редактировать</a>
+                    <a class="btn-sm btn-danger" asp-page="./Delete" asp-route-id="@Model.tags[i].Id" role="button">Удалить</a>
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>

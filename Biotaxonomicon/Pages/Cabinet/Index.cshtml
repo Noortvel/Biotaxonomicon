@@ -1,0 +1,15 @@
+﻿@page
+@model Biotaxonomicon.Pages.Auth.IndexModel
+@{
+    ViewData["Title"] = "Cabinet";
+}
+
+<h1>Кабинет</h1>
+<ul class="list-group">
+    <a asp-page="./Article/Index" class="list-group-item list-group-item-action">Статьи</a>
+    <a asp-page="./Tag/Index" class="list-group-item list-group-item-action">Теги</a>
+    <a asp-page="./TaxNode/Index" class="list-group-item list-group-item-action">Таксон. узлы</a>
+
+
+</ul>
+

@@ -1,0 +1,14 @@
+{
+  "version": "1.0",
+  "defaultProvider": "cdnjs",
+  "libraries": [
+    {
+      "library": "pell@1.0.6",
+      "destination": "wwwroot/lib/pell/"
+    },
+    {
+      "library": "bootstrap-treeview@1.2.0",
+      "destination": "wwwroot/lib/bootstrap-treeview/"
+    }
+  ]
+}

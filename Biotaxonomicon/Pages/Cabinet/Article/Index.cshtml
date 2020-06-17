@@ -1,0 +1,38 @@
+﻿@page
+@model Biotaxonomicon.Pages.Article.IndexModel
+@{
+    ViewData["Title"] = "Index";
+}
+<h1>Редактор статей</h1>
+<a class="btn btn-outline-primary" asp-page="./Create" role="button">Создать</a>
+<table class="table">
+    <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Заголовки</th>
+            <th scope="col">Автор/Псевдоним</th>
+            <th scope="col">Дата создания/изменения</th>
+            <th scope="col">-</th>
+        </tr>
+    </thead>
+    @for (int i = 0; i < Model.articles.Count; i++)
+    {
+        <tbody>
+            <tr>
+                <th scope="row">@Model.articles[i].Id</th>
+                <td>@Model.articles[i].Header , @Model.articles[i].HeaderLatin</td>
+                <td>@Model.users[i].Login / @Model.users[i].Nick</td>
+                <td>@Model.articles[i].CreatedTime / @Model.articles[i].LastEditedTime</td>
+                <td>
+                    <a class="btn-sm btn-secondary" asp-page="./Edit" asp-route-id="@Model.articles[i].Id" role="button">Редактировать</a>
+                    <a class="btn-sm btn-danger" asp-page="./Delete" asp-route-id="@Model.articles[i].Id" role="button">Удалить</a>
+
+                </td>
+            </tr>
+        </tbody>
+    }
+
+</table>
+
+
+

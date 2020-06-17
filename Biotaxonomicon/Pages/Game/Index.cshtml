@@ -1,0 +1,22 @@
+﻿@page
+@model Biotaxonomicon.Pages.Game.IndexModel
+@{
+    ViewData["Title"] = "Life Map - Interactive";
+}
+<div class="webgl-content">
+    <div id="unityContainer">
+
+    </div>
+    @*<div class="footer">
+        <div class="webgl-logo"></div>
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <div class="title">LifeMapTestGL</div>
+    </div>*@
+</div>
+@section Scripts{
+    <script src="~/UnityBuild/TemplateData/UnityProgress.js"></script>
+    <script src="~/UnityBuild/Build/UnityLoader.js"></script>
+    <script>
+        var unityInstance = UnityLoader.instantiate("unityContainer", "/UnityBuild/Build/0Builds.json", { onProgress: UnityProgress });
+    </script>
+}

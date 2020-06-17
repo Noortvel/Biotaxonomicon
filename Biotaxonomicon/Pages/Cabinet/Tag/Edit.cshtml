@@ -1,0 +1,35 @@
+﻿@page "{id}"
+@model Biotaxonomicon.Pages.Cabinet.Tag.EditModel
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Изменение тега</h1>
+<a class="btn btn-outline-dark" asp-page="./Index" role="button">&ltТэги</a>
+<form method="post">
+    <input type="number" hidden name="id" value="@Model.Tag.Id"/>
+    <div class="form-group">
+        <label for="latinNameInput">Название на латинском</label>
+        <small id="latinNameInputHelp" class="form-text text-muted">от 1-го до 48-ми символов</small>
+        <input type="text" value="@Model.Tag.LatinName" name="latinNameInput" class="form-control" id="latinNameInput" minlength="1" maxlength="48">
+    </div>
+    <div class="form-group">
+        <label for="russianNameInput">Название на русском</label>
+        <small id="russianNameInputHelp" class="form-text text-muted">от 1-го до 48-ми символов</small>
+        <input type="text" value="@Model.Tag.RussianName" name="russianNameInput" class="form-control" id="russianNameInput" minlength="1" maxlength="48">
+    </div>
+    @if (Model.WarningInfo != "")
+    {
+        <div class="alert alert-danger" role="alert">
+            @Model.WarningInfo
+        </div>
+    }
+    @if (Model.SuccesInfo != "")
+    {
+        <div class="alert alert-success" role="alert">
+            @Model.SuccesInfo
+        </div>
+    }
+    <button type="submit" class="btn btn-primary">Изменить</button>
+</form>
+
